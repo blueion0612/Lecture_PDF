@@ -1,0 +1,44 @@
+# Source media and results: never commit these.  A single lecture recording is
+# larger than the entire source tree.
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.m4v
+*.webm
+*.wmv
+*.flv
+*.mpg
+*.mpeg
+*.ts
+pdf_output/
+out/
+tests/fixtures/
+
+# Virtual environments.  A copied .venv is worse than none: it still contains a
+# python.exe, but one that points at an interpreter on somebody else's machine.
+.venv/
+venv/
+env/
+
+# Scratch space kept from developing the detector
+_development_archive/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

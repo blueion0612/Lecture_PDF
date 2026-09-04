@@ -1,0 +1,5 @@
+# Windows batch files must keep CRLF: cmd.exe can mis-parse an LF-only .cmd,
+# and git would otherwise normalize them on checkout.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+* text=auto
