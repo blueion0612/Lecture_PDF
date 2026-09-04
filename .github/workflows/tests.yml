@@ -1,0 +1,30 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install (headless OpenCV, no display on a runner)
+        run: |
+          pip install -r requirements.txt pytest
+          pip install --force-reinstall opencv-python-headless
+      - run: pytest -q
+      - name: The console entry point resolves
+        run: |
+          pip install -e .
+          lecture-pdf --help > /dev/null
