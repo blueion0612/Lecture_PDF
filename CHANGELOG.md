@@ -23,11 +23,11 @@ and so that the lecturer's handwriting can be kept rather than avoided.
 - Analysis runs in rectified slide space, so thresholds no longer depend on
   camera framing.
 - Annotation is detected as "changed since the slide arrived" rather than by
-  pen colour, so any pen, chalk or marker works.
+  pen color, so any pen, chalk or marker works.
 - Slide-change detection checks how much of the previous slide *survives*,
   which is what separates a new slide from an annotation.
 - Deduplication defaults to per-video; `--cross-video-dedup` restores the old
-  behaviour.
+  behavior.
 - `--output-width 0` (the default) keeps the slide region's own resolution
   instead of upscaling to 1920.
 - `setup.cmd` detects and rebuilds a `.venv` copied from another machine.

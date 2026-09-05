@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,7 +8,8 @@ version = "2.0.0"
 description = "Turn lecture video into PDF handouts, including the lecturer's handwriting"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Yuhyeon Lee" }]
 keywords = ["lecture", "slides", "video", "pdf", "ocr", "annotation", "opencv"]
 classifiers = [
@@ -25,6 +26,11 @@ dependencies = [
     "Pillow>=10.0",
     "PyMuPDF>=1.24",
 ]
+
+[project.urls]
+Repository = "https://github.com/blueion0612/Lecture_Video_to_PDF"
+Changelog = "https://github.com/blueion0612/Lecture_Video_to_PDF/blob/main/CHANGELOG.md"
+Portfolio = "https://blueion0612.github.io"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]

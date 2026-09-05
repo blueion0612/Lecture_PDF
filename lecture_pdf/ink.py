@@ -1,7 +1,7 @@
 """Annotation tracking: what the lecturer wrote, and when they wiped it off.
 
 Ink is measured as *difference from the slide as it first appeared*, not by
-looking for particular pen colours.  A colour rule only ever fits the recording
+looking for particular pen colors.  A color rule only ever fits the recording
 it was tuned on - it misses a blue pen, chalk on a blackboard, a dark marker on a
 white slide, or a highlighter - whereas "changed since the slide arrived" is
 true of annotation everywhere, and of nothing else once the lecturer has been
@@ -71,7 +71,7 @@ def drop_solid_blobs(mask: np.ndarray, kernel_size: int, minimum_area: float) ->
     Handwriting is thin almost by definition - it is made with a pen - while a
     person is a big solid silhouette.  Opening the mask therefore erases the
     writing and keeps the body, so subtracting what survives leaves the writing
-    alone.  It is the one property that separates them regardless of colour,
+    alone.  It is the one property that separates them regardless of color,
     position or how long anybody stands still, which a purely temporal test
     cannot manage for a lecturer who pauses.
     """

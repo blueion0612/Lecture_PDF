@@ -27,7 +27,7 @@ PALETTE = [
 
 
 def make_slide(width: int, height: int, index: int, lines: int = 6) -> np.ndarray:
-    """A slide with a title band and body text, distinct from its neighbours."""
+    """A slide with a title band and body text, distinct from its neighbors."""
     background, foreground, accent = PALETTE[index % len(PALETTE)]
     slide = np.full((height, width, 3), background, np.uint8)
     rng = np.random.default_rng(1000 + index)

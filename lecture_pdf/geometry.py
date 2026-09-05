@@ -657,7 +657,7 @@ def refine_quad_by_content(
 
 
 def _full_frame_quad(plate: np.ndarray, motion, variability, minimum_area: float = 0.5):
-    """Recognise a source that is already all slide, and only trim its bars.
+    """Recognize a source that is already all slide, and only trim its bars.
 
     A screen recording has no room in it: the changing content runs edge to edge,
     or reaches two opposite edges with nothing but flat letterbox bars beside it.
@@ -780,7 +780,7 @@ def segment_layouts(
 
     A single fixed framing collapses to one segment.  A camera cut or zoom that
     persists produces a second segment; a one-off misdetection does not, because
-    runs shorter than ``minimum_seconds`` are absorbed by their neighbour.
+    runs shorter than ``minimum_seconds`` are absorbed by their neighbor.
     """
     valid = [(timestamp, quad) for timestamp, quad in probes if quad is not None]
     if not valid:

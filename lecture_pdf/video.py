@@ -83,7 +83,7 @@ class FrameReader:
         return frame if ok else None
 
     def window_frames(self, centre: float, span: float, count: int):
-        """Read ``count`` frames spread over ``span`` seconds around ``centre``.
+        """Read ``count`` frames spread over ``span`` seconds around ``center``.
 
         One seek followed by sequential grabs; seeking per frame is far slower and
         less reliable on long files.

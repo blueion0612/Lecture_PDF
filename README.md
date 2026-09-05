@@ -1,18 +1,23 @@
+<div align="center">
+
 # Lecture Video to PDF
 
 Yuhyeon Lee · 2026
 
-[![tests](https://github.com/blueion0612/Lecture_Video_to_PDF/actions/workflows/tests.yml/badge.svg)](https://github.com/blueion0612/Lecture_Video_to_PDF/actions/workflows/tests.yml)
+[![tests](https://img.shields.io/github/actions/workflow/status/blueion0612/Lecture_Video_to_PDF/tests.yml?branch=main&label=tests)](https://github.com/blueion0612/Lecture_Video_to_PDF/actions/workflows/tests.yml)
 [![License](https://img.shields.io/github/license/blueion0612/Lecture_Video_to_PDF)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
+[![Status](https://img.shields.io/badge/status-maintained-orange)](#limitations)
 [![Release](https://img.shields.io/github/v/release/blueion0612/Lecture_Video_to_PDF)](https://github.com/blueion0612/Lecture_Video_to_PDF/releases)
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 
-[**Releases**](https://github.com/blueion0612/Lecture_Video_to_PDF/releases) · [**Changelog**](CHANGELOG.md) · [**How it works**](#how-it-works)
+[**Releases**](https://github.com/blueion0612/Lecture_Video_to_PDF/releases) · [**Changelog**](CHANGELOG.md)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/hero_before_after-dark.png">
   <img alt="Left: a video frame of a keystoned screen with a lecturer in front of it. Right: the page the tool recovered from that recording, rectified and upright" src="docs/figures/hero_before_after.png">
 </picture>
+
+</div>
 
 *Both images are real output: the fixture on the left, the page the pipeline recovered
 from it on the right. Regenerate with `python docs/figures/make_hero.py`.*
@@ -75,9 +80,13 @@ land in `Lectures/pdf_output`. If the environment ever breaks, run `setup.cmd`.
 Anywhere else:
 
 ```bash
-pip install -r requirements.txt
-python lecture_video_to_pdf.py "path/to/lectures" --output "path/to/pdf_output"
+git clone https://github.com/blueion0612/Lecture_Video_to_PDF
+cd Lecture_Video_to_PDF
+pip install -e .
+lecture-pdf "path/to/lectures" --output "path/to/pdf_output"
 ```
+
+`python lecture_video_to_pdf.py` runs the same thing without installing.
 
 The input may be a single video or a folder of them.
 
@@ -86,24 +95,30 @@ The input may be a single video or a folder of them.
 Each video is scanned four times, and no stage holds more than a bounded number of
 frames, so multi-hour recordings are fine.
 
-**1. Locate the slide region.** A screen is the part of the frame that *changes but
+### 1. Locate the slide region
+
+A screen is the part of the frame that *changes but
 does not move*. A wall does neither, a lectern or logo does not change, and the
 lecturer never stops moving; those three facts together isolate the screen without
 knowing anything about the room. The region is then snapped to the real physical
 border by looking for straight edges, and rectified out of its perspective. Screen
-captures and letterboxed video are recognised as such and left uncropped.
+captures and letterboxed video are recognized as such and left uncropped.
 
-**2. Find slide changes.** Comparison happens in rectified slide coordinates, so the
+### 2. Find slide changes
+
+Comparison happens in rectified slide coordinates, so the
 thresholds do not depend on where the camera was placed.
 
 - Someone walking past changes the frame a great deal and then changes it back, so a
   candidate is only accepted if the frame still differs some seconds later.
 - Annotation adds to what is already there, so the check is how much of the previous
   slide survives, not how much changed.
-- Colour is compared as well as brightness, so two slides that differ only in hue are
+- Color is compared as well as brightness, so two slides that differ only in hue are
   not missed.
 
-**3. Track annotation.** Ink is not defined by pen colour but as *what differs from
+### 3. Track annotation
+
+Ink is not defined by pen color but as *what differs from
 the slide when it first appeared*, so red, yellow and green markers, chalk, and black
 pen on white all behave the same.
 
@@ -114,7 +129,9 @@ pen on white all behave the same.
 - Whatever the lecturer occludes is treated as *unknown* rather than *erased*, so the
   state survives them standing in front of the board.
 
-**4. Render pages.** Frames around the chosen instant are composited by median. This
+### 4. Render pages
+
+Frames around the chosen instant are composited by median. This
 recovers whatever the lecturer moved away from between those frames. It thins them
 rather than erasing them: a head that sweeps across is gone, a torso that stays in
 one place for most of the composited frames survives, and widening `--plate-frames`
@@ -144,7 +161,7 @@ instant instead.
 --screen-corners "..."              give the four corners instead of detecting them
 --no-clean-plate                    render one instant instead of compositing
 --plate-frames 9                    frames composited for each page
---workers 3                         videos analysed in parallel
+--workers 3                         videos analyzed in parallel
 --analyze-only                      report the analysis without writing anything
 ```
 
@@ -188,21 +205,27 @@ lecture_pdf/
   video.py        frame access
   util.py         small shared helpers
 tests/            synthetic recordings with known answers
-docs/figures/     README figure and the script that regenerates it
+docs/figures/     README figure, the script that regenerates it, figstyle.py
 run.cmd  run_with_notes.cmd  setup.cmd    Windows entry points
+pyproject.toml    package definition and the lecture-pdf command
+requirements.txt  what setup.cmd installs; a test keeps it equal to pyproject.toml
+CHANGELOG.md      what changed in each release
 ```
 
 ## Tests
 
-Six checks over five synthetic recordings whose correct answers are known in advance:
+Seven checks. Six run over five synthetic recordings whose correct answers are known
+in advance:
 a full-screen capture, letterboxed video, a keystoned room camera with the lecturer
 occluding the screen, a recording that is reframed part-way, a write-and-erase
-sequence, and PDF generation. Fixtures are built on the first run and cached
-afterwards, so only the first run is slow.
+sequence, and PDF generation. The seventh asserts that `requirements.txt`, which the
+Windows launchers install from, lists exactly what `pyproject.toml` declares.
+Fixtures are built on the first run and cached afterwards, so only the first run is
+slow.
 
 ```bash
-pytest                        # if pytest is installed
-python tests/test_pipeline.py # works without it
+python -m pytest -q
+python tests/test_pipeline.py    # the six pipeline checks, without pytest
 ```
 
 ## Requirements

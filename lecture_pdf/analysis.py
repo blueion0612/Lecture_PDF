@@ -34,7 +34,7 @@ TITLE_BAND = 0.22
 
 @dataclass
 class Sample:
-    """One analysed moment, already mapped into slide space.
+    """One analyzed moment, already mapped into slide space.
 
     Only the small grayscale view is kept.  Scene detection runs over the whole
     recording, so per-sample cost decides whether a two-hour lecture is analysable
@@ -112,7 +112,7 @@ def change_metrics(previous: Sample, current: Sample, fraction: float | None = N
 
     # Two slides can share a luminance and differ only in hue - a recoloured
     # template, a different section background.  Grayscale would call those
-    # identical, so colour is compared too, on a thumbnail because the difference
+    # identical, so color is compared too, on a thumbnail because the difference
     # that matters here is a broad wash rather than fine detail.
     first_tint = previous.tint if fraction is None else _band(previous.tint, fraction)
     second_tint = current.tint if fraction is None else _band(current.tint, fraction)

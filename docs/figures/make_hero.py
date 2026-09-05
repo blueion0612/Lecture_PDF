@@ -1,8 +1,8 @@
-"""Render the before-and-after figure used at the top of the README.
+"""Draw the README hero: one video frame beside the page recovered from it.
 
 Builds the synthetic room fixture, runs the pipeline on it, then places one raw
-frame next to the page the pipeline recovered from it. Nothing is staged: the
-right-hand image is the tool's own output.
+frame next to the page the pipeline recovered. Nothing is staged: the right-hand
+image is the tool's own output.
 
     python docs/figures/make_hero.py
 
@@ -14,18 +14,13 @@ import sys
 import tempfile
 from pathlib import Path
 
-import cv2
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+HERE = os.path.dirname(os.path.abspath(__file__)) + os.sep
+ROOT = Path(HERE).resolve().parent.parent
+sys.path.insert(0, HERE)
 
-HERE = Path(__file__).resolve().parent
-ROOT = HERE.parent.parent
-
-THEMES = {
-    "light": dict(bg="white", ink="#1c2530", muted="#5b6875", frame="#b9c3cf"),
-    "dark": dict(bg="#0d1117", ink="#e6edf3", muted="#9198a1", frame="#3d444d"),
-}
+import cv2  # noqa: E402
+import figstyle  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
 
 
 def build_inputs(work: Path):
@@ -46,38 +41,36 @@ def build_inputs(work: Path):
         raise SystemExit("could not read a frame from the fixture")
 
     pages = sorted((out / "frames" / "room").glob("*.png")) or \
-            sorted((out / "frames" / "room").glob("*.jpg"))
+        sorted((out / "frames" / "room").glob("*.jpg"))
     if not pages:
         raise SystemExit("the pipeline produced no page images")
     page = cv2.imread(str(pages[1 if len(pages) > 1 else 0]))
     return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), cv2.cvtColor(page, cv2.COLOR_BGR2RGB)
 
 
-def render(theme, out_path, frame, page):
-    T = THEMES[theme]
-    fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.4), dpi=170)
-    fig.patch.set_facecolor(T["bg"])
-    for ax, img, title, sub in (
-        (axes[0], frame, "One video frame", "off-axis camera, lecturer in front of the screen"),
-        (axes[1], page, "Recovered page", "screen located and rectified, no calibration given"),
-    ):
-        ax.imshow(img)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        for spine in ax.spines.values():
-            spine.set_edgecolor(T["frame"])
-            spine.set_linewidth(1.4)
-        ax.set_title(title, fontsize=12, color=T["ink"], fontweight="bold", pad=13)
-        ax.text(0.5, -0.07, sub, transform=ax.transAxes, ha="center", va="top",
-                fontsize=9.4, color=T["muted"])
-    fig.tight_layout(pad=0.6)
-    fig.savefig(out_path, dpi=170, bbox_inches="tight", facecolor=T["bg"])
-    plt.close(fig)
-    print("wrote", out_path)
+def make(frame, page):
+    def draw(T):
+        fig, axes = plt.subplots(1, 2, figsize=(figstyle.WIDTH, 3.4))
+        for ax, img, title, sub in (
+            (axes[0], frame, "One video frame", "off-axis camera, lecturer in front of the screen"),
+            (axes[1], page, "Recovered page", "screen located and rectified, no calibration given"),
+        ):
+            ax.imshow(img)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            for spine in ax.spines.values():
+                spine.set_visible(True)
+                spine.set_edgecolor(T["line"])
+                spine.set_linewidth(1.4)
+            ax.set_title(title, pad=12)
+            ax.text(0.5, -0.07, sub, transform=ax.transAxes, ha="center", va="top",
+                    fontsize=figstyle.SMALL, color=T["muted"])
+        fig.tight_layout(pad=0.6)
+        return fig
+    return draw
 
 
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         frame, page = build_inputs(Path(tmp))
-        render("light", HERE / "hero_before_after.png", frame, page)
-        render("dark", HERE / "hero_before_after-dark.png", frame, page)
+        figstyle.save_both(make(frame, page), HERE + "hero_before_after")
