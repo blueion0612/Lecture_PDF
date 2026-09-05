@@ -1,16 +1,16 @@
 <div align="center">
 
-# Lecture Video to PDF
+# Lecture PDF: slide handouts recovered from a lecture recording
 
 Yuhyeon Lee · 2026
 
-[![tests](https://img.shields.io/github/actions/workflow/status/blueion0612/Lecture_Video_to_PDF/tests.yml?branch=main&label=tests)](https://github.com/blueion0612/Lecture_Video_to_PDF/actions/workflows/tests.yml)
-[![License](https://img.shields.io/github/license/blueion0612/Lecture_Video_to_PDF)](LICENSE)
+[![tests](https://img.shields.io/github/actions/workflow/status/blueion0612/Lecture_PDF/tests.yml?branch=main&label=tests)](https://github.com/blueion0612/Lecture_PDF/actions/workflows/tests.yml)
+[![License](https://img.shields.io/github/license/blueion0612/Lecture_PDF)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
 [![Status](https://img.shields.io/badge/status-maintained-orange)](#limitations)
-[![Release](https://img.shields.io/github/v/release/blueion0612/Lecture_Video_to_PDF)](https://github.com/blueion0612/Lecture_Video_to_PDF/releases)
+[![Release](https://img.shields.io/github/v/release/blueion0612/Lecture_PDF)](https://github.com/blueion0612/Lecture_PDF/releases)
 
-[**Releases**](https://github.com/blueion0612/Lecture_Video_to_PDF/releases) · [**Changelog**](CHANGELOG.md)
+[**Releases**](https://github.com/blueion0612/Lecture_PDF/releases) · [**Changelog**](CHANGELOG.md)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/hero_before_after-dark.png">
@@ -22,7 +22,7 @@ Yuhyeon Lee · 2026
 *Both images are real output: the fixture on the left, the page the pipeline recovered
 from it on the right. Regenerate with `python docs/figures/make_hero.py`.*
 
-**Lecture Video to PDF** turns a recording of a lecture into a PDF of the slides,
+**Lecture PDF** turns a recording of a lecture into a PDF of the slides,
 including what the lecturer wrote on them. It finds the projected screen or
 whiteboard by itself, so there is no per-recording calibration: off-axis cameras that
 leave the screen keystoned, screen captures where the slide fills the frame,
@@ -69,7 +69,7 @@ double-click:
 Lectures/
   week01.mp4
   week02.mp4
-  Lecture_Video_to_PDF/
+  Lecture_PDF/
     run.cmd              clean slides only
     run_with_notes.cmd   clean slides and the handwritten versions
 ```
@@ -80,8 +80,8 @@ land in `Lectures/pdf_output`. If the environment ever breaks, run `setup.cmd`.
 Anywhere else:
 
 ```bash
-git clone https://github.com/blueion0612/Lecture_Video_to_PDF
-cd Lecture_Video_to_PDF
+git clone https://github.com/blueion0612/Lecture_PDF
+cd Lecture_PDF
 pip install -e .
 lecture-pdf "path/to/lectures" --output "path/to/pdf_output"
 ```
